@@ -21,7 +21,6 @@ class DropBoxController {
   messagingSenderId: "195337371753",
   appId: "1:195337371753:web:f725b74a087711d24922f8"
 };
-    
     firebase.initializeApp(firebaseConfig);
   }
 
