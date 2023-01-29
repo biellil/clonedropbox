@@ -12,16 +12,17 @@ class DropBoxController {
   }
 
   connectFirebase() {
-    const firebaseConfig = {
-      apiKey: "AIzaSyBUKm5DIKGVzBN3bcz0jJcHL-7B3KTgezI",
-      authDomain: "clonedropbox-87cae.firebaseapp.com",
-      databaseURL: "https://clonedropbox-87cae-default-rtdb.firebaseio.com",
-      projectId: "clonedropbox-87cae",
-      storageBucket: "clonedropbox-87cae.appspot.com",
-      messagingSenderId: "195337371753",
-      appId: "1:195337371753:web:f725b74a087711d24922f8"
-    };
-    const app = initializeApp(firebaseConfig);
+   const firebaseConfig = {
+  apiKey: "AIzaSyBUKm5DIKGVzBN3bcz0jJcHL-7B3KTgezI",
+  authDomain: "clonedropbox-87cae.firebaseapp.com",
+  databaseURL: "https://clonedropbox-87cae-default-rtdb.firebaseio.com",
+  projectId: "clonedropbox-87cae",
+  storageBucket: "clonedropbox-87cae.appspot.com",
+  messagingSenderId: "195337371753",
+  appId: "1:195337371753:web:f725b74a087711d24922f8"
+};
+    
+    firebase.initializeApp(firebaseConfig);
   }
 
   initEvents() {
