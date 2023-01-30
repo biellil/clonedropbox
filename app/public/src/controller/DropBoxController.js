@@ -26,6 +26,11 @@ class DropBoxController {
     firebase.initializeApp(firebaseConfig);
   }
   initEvents() {
+
+    this.listFilesEl.addEventListener('selectionchange', e => {
+      console.log('selectionchange')
+    })
+
     this.btnSendFileEl.addEventListener("click", (event) => {
       this.inputFilesEl.click();
     });
@@ -331,6 +336,8 @@ class DropBoxController {
 
   initEventsLi(li) {
     li.addEventListener('click', e => {
+
+      this.listFilesEl.dispatchEvent(this.onselectionchange)
 
       if (e.shiftKey) {
         let firstLi = this.listFilesEl.querySelector('.selected');
