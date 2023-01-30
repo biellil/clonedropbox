@@ -30,7 +30,7 @@ class DropBoxController {
     });
 
     this.inputFilesEl.addEventListener("change", (event) => {
-      this.btnSendFileEl.disabled = true
+      this.btnSendFileEl.disabled = false
       this.uploadTask(event.target.files).then(responses => {
         responses.forEach(resp => {
 
@@ -82,20 +82,20 @@ class DropBoxController {
         }
 
         ajax.onerror = event => {
-          reject(event)
+          reject(event);
         }
 
         ajax.upload.onprogress = event => {
-          this.uploadProgress(event, file)
+          this.uploadProgress(event, file);
         }
 
         let formData = new FormData()
 
-        formData.append('input-file', file)
+        formData.append('input-file', file);
 
         this.startUploadTime = Date.now();
 
-        ajax.send(formData)
+        ajax.send(formData);
 
       }))
     })
@@ -123,11 +123,11 @@ class DropBoxController {
     let hours = parseInt((duration / (1000 * 60 * 60)) % 24);
 
     if (hours > 0) {
-      return `${hours} horas, ${minutes} minutos e ${seconds} segundos`
+      return `${hours} horas, ${minutes} minutos e ${seconds} segundos`;
     }
 
     if (minutes > 0) {
-      return `${minutes} minutos e ${seconds} segundos`
+      return `${minutes} minutos e ${seconds} segundos`;
     }
 
     if (seconds > 0) {
