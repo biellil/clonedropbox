@@ -3,24 +3,26 @@ class DropBoxController {
     this.btnSendFileEl = document.querySelector("#btn-send-file");
     this.inputFilesEl = document.querySelector("#files");
     this.snackModalEl = document.querySelector("#react-snackbar-root");
-    this.progressBarEl = this.snackModalEl.querySelector('.mc-progress-bar-fg')
-    this.nameFileEl = this.snackModalEl.querySelector('.filename')
-    this.timeleftEl = this.snackModalEl.querySelector('.timeleft')
+    this.progressBarEl = this.snackModalEl.querySelector('.mc-progress-bar-fg');
+    this.nameFileEl = this.snackModalEl.querySelector('.filename');
+    this.timeleftEl = this.snackModalEl.querySelector('.timeleft');
+    this.listFilesEl = document.querySelector('#list-of-files-and-directories');
 
-    this.connectFirebase()
+    this.connectFirebase();
     this.initEvents();
+    this.readFiles();
   }
 
   connectFirebase() {
-   const firebaseConfig = {
-  apiKey: "AIzaSyBUKm5DIKGVzBN3bcz0jJcHL-7B3KTgezI",
-  authDomain: "clonedropbox-87cae.firebaseapp.com",
-  databaseURL: "https://clonedropbox-87cae-default-rtdb.firebaseio.com",
-  projectId: "clonedropbox-87cae",
-  storageBucket: "clonedropbox-87cae.appspot.com",
-  messagingSenderId: "195337371753",
-  appId: "1:195337371753:web:f725b74a087711d24922f8"
-};
+    const firebaseConfig = {
+      apiKey: "AIzaSyBUKm5DIKGVzBN3bcz0jJcHL-7B3KTgezI",
+      authDomain: "clonedropbox-87cae.firebaseapp.com",
+      databaseURL: "https://clonedropbox-87cae-default-rtdb.firebaseio.com",
+      projectId: "clonedropbox-87cae",
+      storageBucket: "clonedropbox-87cae.appspot.com",
+      messagingSenderId: "195337371753",
+      appId: "1:195337371753:web:f725b74a087711d24922f8"
+    };
     firebase.initializeApp(firebaseConfig);
   }
 
@@ -30,7 +32,7 @@ class DropBoxController {
     });
 
     this.inputFilesEl.addEventListener("change", (event) => {
-      this.btnSendFileEl.disabled = false
+      this.btnSendFileEl.disabled = true
       this.uploadTask(event.target.files).then(responses => {
         responses.forEach(resp => {
 
@@ -82,20 +84,20 @@ class DropBoxController {
         }
 
         ajax.onerror = event => {
-          reject(event);
+          reject(event)
         }
 
         ajax.upload.onprogress = event => {
-          this.uploadProgress(event, file);
+          this.uploadProgress(event, file)
         }
 
         let formData = new FormData()
 
-        formData.append('input-file', file);
+        formData.append('input-file', file)
 
         this.startUploadTime = Date.now();
 
-        ajax.send(formData);
+        ajax.send(formData)
 
       }))
     })
@@ -123,11 +125,11 @@ class DropBoxController {
     let hours = parseInt((duration / (1000 * 60 * 60)) % 24);
 
     if (hours > 0) {
-      return `${hours} horas, ${minutes} minutos e ${seconds} segundos`;
+      return `${hours} horas, ${minutes} minutos e ${seconds} segundos`
     }
 
     if (minutes > 0) {
-      return `${minutes} minutos e ${seconds} segundos`;
+      return `${minutes} minutos e ${seconds} segundos`
     }
 
     if (seconds > 0) {
@@ -301,13 +303,30 @@ class DropBoxController {
     }
   }
 
-  getFileView(file) {
-    return `
-      <li>
-        ${this.getFileIconView(file)}
-        <div class="name text-center">${file.name}s</div>
-      </li>
-    `
+  getFileView(file, key) {
+
+    let li = document.createElement('li')
+
+    li.dataset.key = key
+
+    li.innerHTML = `
+      ${this.getFileIconView(file)}
+      <div class="name text-center">${file.name}</div>
+    ` 
+
+    return li;
+  }
+
+  readFiles() {
+    this.getFirebaseRef().on('value', snapshot => {
+      this.listFilesEl.innerHTML = '';
+      snapshot.forEach(snapshotItem => {
+        let key = snapshotItem.key;
+        let data = snapshotItem.val()
+        
+        this.listFilesEl.appendChild(this.getFileView(data, key))
+      })
+    })
   }
 
 }
